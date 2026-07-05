@@ -93,6 +93,5 @@ window.SANDPIPER.destinations = {
   book_resident:    'https://sandpiper-golf-club-tri-county-residents.book.teeitup.com/',
   book_preferred:   'https://sandpiper-golf-club-preferred-player.book.teeitup.com/',
   book_montecito:   'https://sandpiper-golf-club-members.book.teeitup.com/',
-  grillMenu:        'https://www.sandpipergolf.com/sandpiper-grill/sandpiper-grill-menu',
   scorecard:        null    // Official scorecard — still pending
 };

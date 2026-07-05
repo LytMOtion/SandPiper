@@ -169,6 +169,43 @@ no production-domain assumptions. The four booking paths and the 18-hole tour ar
 
 ---
 
+
+## 13 · Course data, Grill & booking (this iteration)
+
+**Booking (TeeItUp):** the four verified booking URLs and (removed) grill link are wired via
+`assets/data.js` → destinations. All four CTAs are now active external links (new tab, rel=noopener):
+- Non-Resident → sandpiper-golf-club.book.teeitup.com
+- Tri-County Resident → sandpiper-golf-club-tri-county-residents.book.teeitup.com
+- Preferred Player → sandpiper-golf-club-preferred-player.book.teeitup.com
+- Montecito Club Member → sandpiper-golf-club-members.book.teeitup.com
+No availability/inventory is simulated; TeeItUp remains the engine.
+
+**Grill:** new internal `grill.html` rebuilt in the design system from Sandpiper's current Grill menu
+(Breakfast, Wraps, Burgers & Dogs, Salad & Chili, Sandwiches, From the Bar). Nav "The Grill",
+the homepage "See the menu" CTA, and the Events F&B CTA all point to `grill.html`; the external
+grillMenu destination was removed. **Prices/items carry a visible "to be verified before production"
+note.** One breakfast price ("Two-Egg Breakfast") could not be confidently matched from the source
+layout and shows a clean dash — verify against the kitchen.
+
+**Scorecard data (hole 1–18):** par, yardage by tee (Black/Gold/Silver/Copper), and Men's stroke
+index populated from the course scorecard database (greenskeeper.org, last updated 2020). All
+"Pending card" labels removed. **Verify against the official Sandpiper scorecard before production**
+— note a total-yardage discrepancy across sources: this card lists Black 7,159 yds (slope 135,
+rating 75.0); other sources cite ~7,068. Women's par/HDCP also available if needed.
+
+**Wind/weather:** the per-hole "Prevailing wind" row was removed (no verified per-hole data). A
+single course-wide note was added to the Course Tour: "Wind and the marine layer can change quickly
+on the bluff — check current conditions before play."
+
+## 14 · Documented future enhancements (NOT built — require real data/APIs)
+
+- **"Today at Sandpiper" conditions module:** could show temperature, wind speed/direction, fog /
+  marine-layer status, and sunset time. Requires a real weather API key + data source. Not built.
+- **Live GPS walking-distance / yardage:** requires user geolocation, accurate hole geometry, and
+  pin positions (a golf-GPS mapping system). Out of scope for this website phase. Not built.
+
+---
+
 ## APPENDIX · Objective verification snapshot
 _Generated 2026-07-04 16:41 against the actual repository._
 
