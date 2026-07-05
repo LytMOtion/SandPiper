@@ -36,34 +36,75 @@
     reveals.forEach(function (el) { io.observe(el); });
   }
 
-  /* --- Course-tour: hole jump + deep-link (the 3-second test) --- */
+  /* --- Course-tour: hole jump with decode-gated swap (no white flash),
+     neighbour + idle preloading, and a race guard so only the newest tap wins. --- */
   var holeButtons = document.querySelectorAll('[data-hole]');
   var holePanels = document.querySelectorAll('[data-hole-panel]');
-  function showHole(n, push) {
-    // Act only when a real panel exists (all 18 holes are built); an unknown
-    // hole is ignored so nothing is ever blanked.
-    var panel = document.querySelector('[data-hole-panel="' + n + '"]');
-    if (!panel) return;
-    holePanels.forEach(function (p) { p.hidden = (p !== panel); });
+  var seq = 0;                                  // request token
+  function panelOf(n) { return document.querySelector('[data-hole-panel="' + n + '"]'); }
+  function imgOf(panel) { return panel ? panel.querySelector('img') : null; }
+
+  // Resolve only when the image is actually ready to paint (fetch + decode).
+  // Forces a hidden/lazy image to load; a safety timeout guarantees we never hang.
+  function ready(img) {
+    return new Promise(function (res) {
+      if (!img) return res();
+      var finish = function () { if (img.decode) { img.decode().then(res, res); } else { res(); } };
+      if (img.complete && img.naturalWidth > 0) return finish();
+      var safety = setTimeout(res, 2500);
+      var done = function () {
+        clearTimeout(safety);
+        img.removeEventListener('load', done); img.removeEventListener('error', done);
+        finish();
+      };
+      img.addEventListener('load', done); img.addEventListener('error', done);
+      img.loading = 'eager';                    // kick a lazy/hidden image into loading
+      if (img.decode) img.decode().then(function () { clearTimeout(safety); done(); }, function () {});
+    });
+  }
+  function setActive(n) {                        // sole visual driver + a11y
     holeButtons.forEach(function (b) {
       var on = b.getAttribute('data-hole') === String(n);
+      b.classList.toggle('is-active', on);
       b.setAttribute('aria-current', on ? 'true' : 'false');
     });
-    if (push) history.replaceState(null, '', '#hole-' + n);
-    var live = document.getElementById('hole-live');
-    if (live) live.textContent = 'Showing hole ' + n;
   }
+  function preload(n) { var p = panelOf(n); if (p) ready(imgOf(p)); }
+
+  function showHole(n, push, announce) {
+    var panel = panelOf(n); if (!panel) return;
+    var my = ++seq;
+    // instant feedback: the tapped control looks active immediately (visual only)
+    holeButtons.forEach(function (b) { b.classList.toggle('is-active', b.getAttribute('data-hole') === String(n)); });
+    ready(imgOf(panel)).then(function () {
+      if (my !== seq) return;                    // superseded by a newer tap — abort
+      holePanels.forEach(function (p) { p.hidden = (p !== panel); });
+      setActive(n);                              // aria-current now matches DISPLAYED hole
+      if (push) history.replaceState(null, '', '#hole-' + n);
+      if (announce !== false) { var live = document.getElementById('hole-live'); if (live) live.textContent = 'Showing hole ' + n; }
+      if (!reduce) {                             // subtle fade of the already-decoded image (never white)
+        var im = imgOf(panel);
+        if (im) { im.style.transition = 'none'; im.style.opacity = '.55';
+          requestAnimationFrame(function () { im.style.transition = 'opacity 220ms ease'; im.style.opacity = '1'; }); }
+      }
+      preload(+n + 1); preload(+n - 1);          // warm neighbours for the next tap
+    });
+  }
+
   if (holeButtons.length) {
     holeButtons.forEach(function (b) {
       b.addEventListener('click', function () { showHole(b.getAttribute('data-hole'), true); });
     });
-    // Deep-link (#hole-N); an invalid/unknown hash falls back to the default hole.
     var m = (location.hash.match(/hole-(\d+)/) || [])[1];
-    var valid = m && document.querySelector('[data-hole-panel="' + m + '"]');
-    var initial = valid ? m
-      : (document.querySelector('[data-hole-panel]:not([hidden])')
-          ?.getAttribute('data-hole-panel') || '13');
-    showHole(initial, false);
+    var visible = document.querySelector('[data-hole-panel]:not([hidden])');
+    var visN = visible ? visible.getAttribute('data-hole-panel') : '13';
+    var initial = (m && panelOf(m)) ? m : visN;
+    setActive(initial);
+    if (initial !== visN) { showHole(initial, false, false); }   // deep-link to a different hole
+    else { preload(initial); preload(+initial + 1); preload(+initial - 1); }
+    // progressively warm the rest of the 18 during idle time (no upfront bandwidth spike)
+    var idle = window.requestIdleCallback || function (cb) { return setTimeout(cb, 500); };
+    idle(function () { for (var h = 1; h <= 18; h++) preload(h); });
   }
 
   /* --- Dependency-safe outbound links (booking paths, menu, scorecard) ---

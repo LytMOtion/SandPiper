@@ -88,10 +88,11 @@ window.SANDPIPER = {
    here (no markup changes needed). Do not invent URLs.
    ------------------------------------------------------------------ */
 window.SANDPIPER.destinations = {
-  book_nonResident: null,   // Non-Resident public booking
-  book_resident:    null,   // Tri-County Resident booking
-  book_preferred:   null,   // Preferred Player sign-in / booking
-  book_montecito:   null,   // Montecito Club member channel
-  grillMenu:        null,   // The Grill menu
-  scorecard:        null    // Official scorecard
+  // Verified live TeeItUp booking URLs (from Sandpiper's current booking page):
+  book_nonResident: 'https://sandpiper-golf-club.book.teeitup.com/',
+  book_resident:    'https://sandpiper-golf-club-tri-county-residents.book.teeitup.com/',
+  book_preferred:   'https://sandpiper-golf-club-preferred-player.book.teeitup.com/',
+  book_montecito:   'https://sandpiper-golf-club-members.book.teeitup.com/',
+  grillMenu:        'https://www.sandpipergolf.com/sandpiper-grill/sandpiper-grill-menu',
+  scorecard:        null    // Official scorecard — still pending
 };

@@ -162,9 +162,19 @@ a[data-dest].is-pending{box-shadow:inset 0 -1px 0 color-mix(in srgb,var(--marine
 .nav a:hover::after,.nav a[aria-current="page"]::after{right:0}
 .nav a[aria-current="page"]{color:var(--pacific)}
 .nav__book{margin-left:.4rem}
+/* ISSUE 1 fix: the Book CTA is an <a> inside .nav, so `.nav a{color:ink}` was
+   overriding `.btn{color:fog}` (dark text on the dark Pacific fill). Re-assert
+   light text on the CTA in every state; fog-on-Pacific contrast ≈ 13:1 (AA). */
+.nav .btn,.nav .btn:hover,.nav .btn:focus-visible,.nav .btn:active{color:var(--fog)}
+.nav .btn:hover{background:var(--pacific-2)}
+/* ISSUE 2 fix: give the mobile toggle an intentional colour so iOS Safari does
+   not render "Menu"/"Close" in system link-blue. */
 .nav-toggle{display:none;margin-left:auto;background:none;border:var(--hair);
   padding:.55em .7em;font:600 .85rem/1 var(--sans);letter-spacing:.06em;
-  text-transform:uppercase;cursor:pointer}
+  text-transform:uppercase;cursor:pointer;
+  color:var(--ink);-webkit-text-fill-color:var(--ink);
+  -webkit-appearance:none;appearance:none}
+.nav-toggle [data-label]{color:inherit;-webkit-text-fill-color:var(--ink)}
 
 @media (max-width:860px){
   .nav{position:fixed;inset:64px 0 auto 0;flex-direction:column;align-items:stretch;
