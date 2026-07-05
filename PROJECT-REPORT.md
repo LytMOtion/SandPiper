@@ -252,3 +252,71 @@ PAGE TITLES:
   story.html -> The ground before the game · Sandpiper Golf Club
   events.html -> Events — weddings, outings &amp; gatherings · Sandpiper Golf Club
 ```
+
+---
+
+## §15 · Commercial expansion & navigation architecture pass
+
+**Goal:** add real business lines (instruction, club fitting, tournaments/outings, shop)
+without diluting the restrained brand, and give the site a scalable navigation home for
+secondary pages.
+
+### New pages
+- **`golf-services.html`** — Instruction + Club Fitting on one coherent page.
+  Facts sourced ONLY from `sandpipergolf.com/instruction` and `/club-fitting`.
+  Verified pricing rendered in the ledger ("numbers as instruments"):
+  private lessons ½hr $60 · 1hr $100 · 9-hole playing lesson $300 · 18-hole $500
+  (green fee included on playing lessons); 2 players 1hr $150; 3+ by arrangement;
+  junior (≤17) ½hr $30 · 1hr $60; six-lesson series $300 (½hr) / $500 (1hr), first lesson free.
+  Club fitting: single-category $50 (wedge · irons · long game · driver, 30–60 min),
+  full fit $125 (all four, 90–120 min). Areas-of-instruction chips are verbatim from source.
+  PGA-of-America line quoted with attribution (single short quote, copyright-safe).
+  Scheduling routes to the golf shop **805.968.1541 ext. 4** and `golfshop@sandpipergolf.com`.
+  No online scheduling fabricated (documented as a future dependency).
+- **`outings.html`** — Tournaments & Outings, a serious group-sales page.
+  Facts sourced ONLY from `/outings-a-events`. "What's included" list and "Additional services"
+  list are verbatim from source (12 included services; 8 add-ons flagged "fees may apply /
+  custom quotes"). Formats (corporate days, charity tournaments, shotgun starts, group outings)
+  are a light editorial framing of the same material, not invented offerings.
+  Inquiry composes a pre-filled **mailto** (group / dates / players / format / notes) and offers
+  the golf-shop phone; it explicitly states it does not submit anything. The live site's actual
+  Tournament Request form is noted as an implementation dependency.
+
+### Navigation — the "More" disclosure
+- Restrained squared dropdown added to `app.css` (`.nav__more*`) and `app.js`.
+  Desktop: click to open, `aria-expanded` toggles, Escape closes and refocuses the trigger,
+  click-outside closes, selecting an item closes it. Mobile (≤860px): the group renders inline
+  as a quiet "MORE" section label with the three links always visible (no hidden touch target).
+- Contents: **Golf Services · Tournaments & Outings · Shop** (Shop → `sandpipergolf.com/shop`,
+  external, `target=_blank rel=noopener`). `aria-current="page"` set on the active item on the
+  two new pages. No mega-menu, no system-blue defaults.
+- Applied to all 8 pages (index, tour, rates, events, grill, story, golf-services, outings).
+
+### Events vs Outings separation
+- **Events** = social/celebration (weddings, company celebrations, private dinners, catering).
+- **Outings** = corporate/charity/competitive group golf.
+- Homepage "Beyond the round": card retitled *Events & celebrations*; a slim pathway line now
+  points groups to Outings and Golf Services (no giant new section).
+- `events.html`: positioning + card 03 reframed to cross-link `outings.html` instead of hosting
+  the tournament copy itself.
+- Homepage footer restructured into Course / Gather / More columns so Events and Tournaments &
+  Outings read as distinct destinations; Shop + Contact grouped under More. `.foot__grid` widened
+  to four columns.
+
+### Shop
+- External verified destination only (`https://www.sandpipergolf.com/shop`). Wired in the More
+  nav on every page, contextually from the Golf Services fitting section, and in the homepage
+  footer. No fake commerce, no cart, no inventory.
+
+### Unresolved dependencies (documented, not fabricated)
+- Real photography for instruction and club fitting (honest `.ph` placeholders in place).
+- Production Tournament Request form (proof uses mailto composition only).
+- All instruction/fitting pricing to be re-verified against the official site before production.
+- Dedicated outings contact/booking behavior (proof routes to golf shop phone + email).
+
+### QA (this pass)
+- `node --check` passes on app.js and data.js.
+- All 8 pages: exactly one H1; `.nav__more` present; `aria-current` in More only on the two new pages.
+- Stray `href="#"` stubs: 0. All internal `.html` links resolve. New-page images all present.
+- rates.html `#book` retains its in-page target (valid anchor, not a stub).
+- New pages carry unique title / description / OG / Twitter meta and the preview `noindex` guard.

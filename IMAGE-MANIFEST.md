@@ -87,3 +87,24 @@ No photographic imagery (typographic gateway + ledger by design). No images requ
 `marine`, `green-honest`, and `descent` are each reused across two pages for the proof. This is
 acceptable placeholder economy but should be **diversified with distinct real frames** in
 production so no image appears twice across the site.
+
+---
+
+## Golf Services  (`golf-services.html`)
+| Slot | Role | Ratio | Current | Honesty | Production need |
+|---|---|---|---|---|---|
+| `marine` (hero) | Instruction mood — a player at work on the course | 16:9 | Reused AI ref | Ref-tagged "AI-generated · not Sandpiper" | **Distinct real hero** (lesson/practice on site) |
+| `.ph--tall` | Private instruction | 4:5 | Honest placeholder | Labeled "Photo to come · lesson on site"; no stock, no fabrication | **Shoot on site** — instructor + student, range/short-game |
+| `.ph--wide` | Club fitting | 16:9 | Honest placeholder | Labeled "Photo to come · fitting on site" | **Shoot on site** — fitting session in the shop |
+
+## Tournaments & Outings  (`outings.html`)
+| Slot | Role | Ratio | Current | Honesty | Production need |
+|---|---|---|---|---|---|
+| `descent` (hero) | Group-golf setting — coastal fairway sweep | 16:9 | Reused AI ref | Ref-tagged | **Distinct real hero** (shotgun field / staged carts / full course) |
+| `ocean-flag` | Catering/finish setting | 16:9 | Reused AI ref | Ref-tagged | Distinct real frame (event on the bluff / awards) |
+
+## Repetition watch (updated)
+`marine` now appears on the homepage (approach) and Golf Services (hero); `descent` on Events
+(setting) and Outings (hero); `ocean-flag` on the homepage (climax) and Outings. Acceptable
+placeholder economy for the proof — **each must become a distinct real frame in production** so
+no image appears on two pages. Instruction and fitting have NO borrowed photo (honest `.ph` only).
