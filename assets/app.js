@@ -23,6 +23,34 @@
     });
   }
 
+  /* --- "More" nav disclosure (desktop dropdown; mobile shows inline via CSS) --- */
+  var more = document.querySelector('.nav__more');
+  if (more) {
+    var moreBtn = more.querySelector('.nav__more-btn');
+    var moreMenu = more.querySelector('.nav__more-menu');
+    var isDesktop = function () { return window.matchMedia('(min-width:861px)').matches; };
+    var setMore = function (open) {
+      more.setAttribute('data-open', String(open));
+      moreBtn.setAttribute('aria-expanded', String(open));
+      if (open) { moreMenu.removeAttribute('hidden'); }
+      else { moreMenu.setAttribute('hidden', ''); }
+    };
+    moreBtn.addEventListener('click', function (e) {
+      if (!isDesktop()) return;                 // mobile: menu is always visible (CSS)
+      e.stopPropagation();
+      setMore(more.getAttribute('data-open') !== 'true');
+    });
+    document.addEventListener('click', function (e) {
+      if (isDesktop() && more.getAttribute('data-open') === 'true' && !more.contains(e.target)) setMore(false);
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && more.getAttribute('data-open') === 'true') { setMore(false); moreBtn.focus(); }
+    });
+    moreMenu.addEventListener('click', function (e) {
+      if (e.target.closest('a') && isDesktop()) setMore(false);
+    });
+  }
+
   /* --- Swell reveal (and the climax arrival-settle) --- */
   var reveals = document.querySelectorAll('.reveal, .swell');
   if (reduce || !('IntersectionObserver' in window)) {
