@@ -1,0 +1,5 @@
+# PREVIEW GUARD — remove or replace before production launch.
+# This deployment is a Creative Proof with placeholder rates/policies and
+# AI-reference imagery. It must not compete in search with the live Sandpiper site.
+User-agent: *
+Disallow: /
